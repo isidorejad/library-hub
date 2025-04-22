@@ -230,4 +230,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Project Maintainer - [Jad Isidore](mailto:isidorejad@gmail.com)
 
-Project Link: [https://github.com/yourusername/library-management-system](https://github.com/isidorejad/library-hub)
+Project Link: [https://github.com/isidorejad/library-hub](https://github.com/isidorejad/library-hub)
