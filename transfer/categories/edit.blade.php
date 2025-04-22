@@ -1,0 +1,146 @@
+@extends('layouts.app', ['title' => 'Edit Book - ' . $book->title])
+
+@section('content')
+<div class="container mx-auto px-4 py-8">
+    <div class="mb-6">
+        <div class="flex items-center">
+            <a href="{{ route('books.show', $book) }}" class="text-indigo-600 hover:text-indigo-900 mr-2">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1 class="text-2xl font-bold text-gray-900">Edit Book: {{ $book->title }}</h1>
+        </div>
+    </div>
+
+    <div class="bg-white shadow rounded-lg p-6">
+        <form action="{{ route('books.update', $book) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Left Column -->
+                <div class="space-y-6">
+                    <div>
+                        <label for="title" class="block text-sm font-medium text-gray-700">Title *</label>
+                        <input type="text" id="title" name="title" value="{{ old('title', $book->title) }}"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            required>
+                        @error('title')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="author" class="block text-sm font-medium text-gray-700">Author *</label>
+                        <input type="text" id="author" name="author" value="{{ old('author', $book->author) }}"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            required>
+                        @error('author')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="isbn" class="block text-sm font-medium text-gray-700">ISBN</label>
+                        <input type="text" id="isbn" name="isbn" value="{{ old('isbn', $book->isbn) }}"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        @error('isbn')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="genre" class="block text-sm font-medium text-gray-700">Genre</label>
+                        <input type="text" id="genre" name="genre" value="{{ old('genre', $book->genre) }}"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        @error('genre')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="space-y-6">
+                    <div>
+                        <label for="publication_date" class="block text-sm font-medium text-gray-700">Publication Date</label>
+                        <input type="date" id="publication_date" name="publication_date" value="{{ old('publication_date', $book->publication_date ? $book->publication_date->format('Y-m-d') : '') }}"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        @error('publication_date')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="cover_image" class="block text-sm font-medium text-gray-700">Cover Image URL</label>
+                        <input type="url" id="cover_image" name="cover_image" value="{{ old('cover_image', $book->cover_image) }}"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        @error('cover_image')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="categories" class="block text-sm font-medium text-gray-700">Categories</label>
+                        <select id="categories" name="categories[]" multiple
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                            @foreach($categories as $category)
+                            <option value="{{ $category->id }}" 
+                                @if(in_array($category->id, old('categories', $book->categories->pluck('id')->toArray()))) selected @endif>
+                                {{ $category->name }}
+                            </option>
+                            @endforeach
+                        </select>
+                        @error('categories')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="tags" class="block text-sm font-medium text-gray-700">Tags</label>
+                        <select id="tags" name="tags[]" multiple
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                            @foreach($tags as $tag)
+                            <option value="{{ $tag->id }}" 
+                                @if(in_array($tag->id, old('tags', $book->tags->pluck('id')->toArray()))) selected @endif>
+                                {{ $tag->name }}
+                            </option>
+                            @endforeach
+                        </select>
+                        @error('tags')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="mt-6">
+                <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                <textarea id="description" name="description" rows="3"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">{{ old('description', $book->description) }}</textarea>
+                @error('description')
+                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!-- Actions -->
+            <div class="mt-6 flex justify-end">
+                <a href="{{ route('books.show', $book) }}" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Cancel
+                </a>
+                <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Update Book
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
+
+@push('scripts')
+<script>
+    // Initialize select2 for multiple select
+    document.addEventListener('DOMContentLoaded', function() {
+        new MultiSelectTag('categories')
+        new MultiSelectTag('tags')
+    });
+</script>
+@endpush
