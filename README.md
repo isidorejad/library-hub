@@ -33,7 +33,7 @@ A modern web application for managing books, categories, tags, loans, and review
 
 - **Backend**
   - PHP 8.1+
-  - Laravel 10.x
+  - Laravel 12.x
   - MySQL 8.0+
 
 - **Frontend**
